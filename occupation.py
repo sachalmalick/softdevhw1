@@ -1,22 +1,36 @@
 import random
 
-f = open('occupations.csv', 'r')
-lfile = f.readlines() #list of occupations
+"""
+Args:
+    File name to be read
+Returns:
+    List of csv in [start, end, job title] format.
+    Ex: [0, 65, Maintenance] 
+"""
+
+def listify(filename):
+    tmp = 0
+    L=[]
+    lfile = open(filename, 'r').readlines() 
+    for row in lfile[1:-1]: 
+        num = int(10 * float(row[row.rfind(',')+1:])) # get percentage
+        start = tmp 
+        tmp = num + start 
+        L.append([start, tmp, row[:row.rfind(',')]]) 
+    return L
 
 
-tmp = 0
-L=[]
-for row in lfile[1:-1]:
-    num = int(10 * float(row[row.rfind(',')+1:]))
-    start = tmp
-    tmp = num + start
-    #print "start is" + str(start) + "end is" + str(start + num)
-    L.append([start, tmp, row[:row.rfind(',')]])
-
-#print L
+"""
+Args:
+    None
+Returns:
+    Job title randomly generated
+    based on percentage value
+"""
 
 def chooser():
     rand = int(random.random() * 1000)
+    L = listify('occupations.csv')
     for row in L:
         if rand > row[0] and rand < row[1]:
             return row[2]
